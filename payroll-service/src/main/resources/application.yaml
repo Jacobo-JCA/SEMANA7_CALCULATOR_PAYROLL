@@ -1,0 +1,33 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: payroll-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payroll_db
+    username: postgres 
+    password: root 
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+  web:
+    resources:
+      add-mappings: false
+
+rabbitmq:
+  exchange:
+    employee: employee.exchange
+  queue:
+    employee:
+      events: employee.events.queue
