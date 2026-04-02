@@ -1,164 +1,107 @@
-# ASDD — Agent Spec-Driven Development
+# 💰 Payroll Calculator (Sistema de Nómina)
 
-Framework de desarrollo asistido por IA que transforma requerimientos en código funcional mediante agentes especializados orquestados. Garantiza calidad y trazabilidad a través de especificaciones técnicas aprobadas antes de cualquier implementación.
-
-```
-Requerimiento → Spec → [Backend ∥ DB] → [Unit Tests] → QA → Docs
-```
+Sistema integral de gestión de nómina desarrollado con arquitectura de microservicios usando Spring Boot y React. El objetivo de este proyecto es calcular el salario mensual de los empleados basado en su tipo de contrato, gestionar deducciones, bonificaciones y proveer un resumen detallado.
 
 ---
 
-## Stack Tecnológico
+## 🚀 Arquitectura y Stack Tecnológico
+
+El proyecto está diseñado con **Microservicios (Backend)** y una **SPA (Frontend)**, la comunicación entre microservicios se efectúa mediante mensajería asíncrona.
 
 | Componente | Tecnología |
 |-----------|------------|
-| Lenguaje | Java 21 |
-| Framework | Spring Boot 3.x |
-| Build | Gradle (Groovy DSL) |
-| Base de Datos | PostgreSQL |
-| ORM | Spring Data JPA / Hibernate |
-| Mensajería | RabbitMQ (Spring AMQP) |
-| Tests | JUnit 5 + Mockito |
-| Documentación API | SpringDoc OpenAPI (Swagger UI) |
-| Autenticación | No aplica |
+| **Frontend** | React 18 + TypeScript + Vite |
+| **Backend** | Java 21 + Spring Boot 3.x |
+| **Base de Datos** | PostgreSQL (Gestionada por Docker) |
+| **ORM** | Spring Data JPA / Hibernate |
+| **Mensajería** | RabbitMQ (Comunicación Asíncrona) |
+| **Tests** | JUnit 5 + Mockito |
+| **Contenedores** | Docker & Docker Compose |
 
-## Arquitectura
+### 🧩 Microservicios
 
-Microservicios backend con arquitectura en capas y comunicación asíncrona:
+1. **`employee-service` (Puerto 8081)**  
+   - Gestión de empleados (CRUD).
+   - Administración de contratos (creación, edición, terminación).
+   - Publica eventos en RabbitMQ cuando un empleado es creado o actualizado.
 
-```
-┌──────────────────┐         RabbitMQ         ┌──────────────────┐
-│ employee-service │ ─────────────────────► │ payroll-service  │
-│   (puerto 8081)  │                          │   (puerto 8082)  │
-└──────────────────┘                          └──────────────────┘
-```
+2. **`payroll-service` (Puerto 8082)**  
+   - Consume eventos de `employee-service` para mantener una réplica local básica (LocalEmployee).
+   - Realiza los cálculos de nómina, incluyendo salario base, bonos y deducciones por ley dependiendo del tipo de contrato.
+   - Provee los endpoints para calcular y consultar nóminas mensuales.
 
-### Estructura por microservicio
-
-```
-com.nomina.<servicio>/
-├── controller/        ← REST Controllers
-├── service/           ← Lógica de negocio
-├── repository/        ← Spring Data JPA
-├── entity/            ← Entidades JPA
-├── dto/               ← Request/Response
-├── exception/         ← Excepciones de dominio
-├── config/            ← Configuraciones
-└── infrastructure/    ← RabbitMQ (separado del dominio)
-    └── messaging/
-```
-
-## Compatibilidad
-
-| Herramienta | Configuración | Carpeta de agentes |
-|-------------|---------------|-------------------|
-| **GitHub Copilot** | `.github/copilot-instructions.md` | `.github/agents/` |
-
-## Instalación
-
-### GitHub Copilot
-
-1. Instala la extensión **GitHub Copilot Chat** en VS Code
-2. Activa el uso de instruction files en tu settings.json de VS Code:
-
-```json
-{
-  "github.copilot.chat.codeGeneration.useInstructionFiles": true
-}
-```
-
-3. Copia `.github/` a la raíz de tu proyecto
+3. **`frontend` (Puerto 5173)**  
+   - Interfaz de usuario construida en React + Vite.
+   - Funcionalidades: Lista de empleados, registro, edición de contratos y flujo visual para cálculo de nómina en pasos (Ingresos → Deducciones → Revisión).
 
 ---
 
-## Comandos de Desarrollo
+## ⚙️ Requisitos Previos
+
+- **Java 21**
+- **Node.js** (v18 o superior)
+- **Docker y Docker Compose** (Para base de datos y RabbitMQ)
+- **Maven** (O puedes usar el wrapper `./mvnw` incluido)
+
+---
+
+## 🛠️ Instalación y Ejecución Local
+
+### 1. Iniciar Infraestructura (Docker)
+
+Levanta PostgreSQL y RabbitMQ mediante Docker Compose:
 
 ```bash
-# Compilar
-./gradlew compileJava
+docker-compose up -d
+```
+Esto iniciará:
+- **PostgreSQL** en el puerto `5432` con usuario/contraseña `postgres:postgres`.
+- **RabbitMQ** en los puertos `5672` (AMQP) y `15672` (Management UI) con usuario/contraseña `guest:guest`.
 
-# Ejecutar tests
-./gradlew test
+### 2. Ejecutar Microservicios Backend
 
-# Ejecutar microservicio
-./gradlew bootRun
+Ambos servicios usan Spring Boot. En terminales separadas, ejecuta desde la raíz:
 
-# Build completo
-./gradlew build
+**Employee Service:**
+```bash
+cd employee-service
+./mvnw spring-boot:run
 ```
 
-## Variables de Entorno
-
-```properties
-# PostgreSQL (cada microservicio)
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/employee_db
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=postgres
-
-# RabbitMQ
-SPRING_RABBITMQ_HOST=localhost
-SPRING_RABBITMQ_PORT=5672
-SPRING_RABBITMQ_USERNAME=guest
-SPRING_RABBITMQ_PASSWORD=guest
+**Payroll Service:**
+```bash
+cd payroll-service
+./mvnw spring-boot:run
 ```
 
----
+### 3. Ejecutar Frontend
 
-## Flujo de trabajo
+En una terminal nueva, navega al directorio del frontend:
 
 ```bash
-# 1. Escribe el requerimiento
-echo "HU-01: Registro de empleado" > .github/requirements/registro-empleado.md
+cd frontend
+npm install
+npm run dev
+```
+La aplicación estará disponible en: [http://localhost:5173](http://localhost:5173).
 
-# 2. Genera la spec
-/generate-spec registro-empleado
+---
 
-# 3. Abre .github/specs/hu-01-registro-empleado.spec.md, revisa y cambia:
-#    status: DRAFT  →  status: APPROVED
+## 🧪 Pruebas Unitarias
 
-# 4. Orquesta la implementación
-/asdd-orchestrate registro-empleado
+Cada microservicio cuenta con pruebas unitarias implementadas con **JUnit 5 y Mockito**, cubriendo la lógica de negocio (`Service`) y la capa de exposición (`Controller`).
 
-# → Backend implementado
-# → Tests generados
-# → Análisis QA completado
+Para ejecutar los tests, corre el siguiente comando dentro de cada microservicio:
+```bash
+./mvnw test
 ```
 
-> **Regla de Oro**: Ningún agente escribe código si la spec no tiene `status: APPROVED`.
-
 ---
 
-## Skills disponibles
+## 📖 Documentación Interna
 
-| Comando | Qué hace |
-|---------|----------|
-| `/asdd-orchestrate` | Orquesta el flujo ASDD completo |
-| `/generate-spec` | Genera spec técnica en `.github/specs/` |
-| `/implement-backend` | Implementa el backend según la spec aprobada |
-| `/unit-testing` | Genera tests unitarios (JUnit 5 + Mockito) |
-| `/gherkin-case-generator` | Genera escenarios Given-When-Then y datos de prueba |
-| `/risk-identifier` | Clasifica riesgos de calidad (Alto / Medio / Bajo) |
-| `/automation-flow-proposer` | Propone flujos a automatizar con análisis de ROI |
-| `/performance-analyzer` | Define estrategia de performance testing con k6 |
+Este repositorio usa un marco de desarrollo asistido por Inteligencia Artificial (ASDD) basado en agentes para garantizar calidad y trazabilidad. Los requerimientos y especificaciones (Specs) se encuentran en:
 
----
-
-## Agentes disponibles
-
-| Agente | Fase | Responsabilidad |
-|--------|------|-----------------|
-| `orchestrator` | Entry point | Coordina el flujo completo |
-| `spec-generator` | 1 | Genera especificaciones técnicas |
-| `backend-developer` | 2 | Controllers, services, repositories |
-| `database-agent` | 2 | Entidades JPA, migrations |
-| `test-engineer-backend` | 3 | Tests unitarios JUnit 5 + Mockito |
-| `qa-agent` | 4 | Estrategia QA, Gherkin, riesgos, performance |
-| `documentation-agent` | 5 | README, API docs, ADRs |
-
----
-
-## Documentación interna
-
-- `.github/README.md` — Guía detallada para GitHub Copilot
-- `.github/AGENTS.md` — Reglas de Oro y lineamientos de todos los agentes
-- `.github/specs/README.md` — Convenciones y ciclo de vida de specs
+- Directorio local: `.github/`
+- Requiere de extensiones de IA como **GitHub Copilot Chat** para su iteración automatizada.
+- Consulte `.github/README.md` (si está disponible) para más información sobre los lineamientos y orquestación de IA dentro del repositorio.
