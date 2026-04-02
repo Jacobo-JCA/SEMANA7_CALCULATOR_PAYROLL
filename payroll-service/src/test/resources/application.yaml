@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  
+  rabbitmq:
+    host: localhost
+    port: 5672
+    listener:
+      type: simple
+      simple:
+        auto-startup: false
+
+rabbitmq:
+  exchange:
+    employee: employee.exchange
+  queue:
+    employee:
+      events: employee.events.queue
