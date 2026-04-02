@@ -1,0 +1,39 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: employee-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/employee_db # Ajusta el nombre de la BD si es necesario
+    username: postgres # Ajusta el usuario si es diferente
+    password: root # Ajusta la contraseña si es diferente
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+  web:
+    resources:
+      add-mappings: false
+
+rabbitmq:
+  exchange:
+    employee: employee.exchange
+  queue:
+    employee:
+      created: employee.created.queue
+      updated: employee.updated.queue
+  routing:
+    key:
+      employee:
+        created: employee.created.key
+        updated: employee.updated.key
