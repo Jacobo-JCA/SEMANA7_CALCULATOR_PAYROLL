@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build / compiled
+dist/
+target/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+
+!.env.example
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+tmp/
+temp/

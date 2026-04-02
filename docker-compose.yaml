@@ -1,0 +1,91 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
+  employee-db:
+    image: postgres:14.3
+    container_name: employee-db
+    environment:
+      POSTGRES_DB: ${EMPLOYEE_DB_NAME}
+      POSTGRES_USER: ${EMPLOYEE_DB_USER}
+      POSTGRES_PASSWORD: ${EMPLOYEE_DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${EMPLOYEE_DB_USER} -d ${EMPLOYEE_DB_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - employee-data:/var/lib/postgresql/data
+
+  payroll-db:
+    image: postgres:14.3
+    container_name: payroll-db
+    environment:
+      POSTGRES_DB: ${PAYROLL_DB_NAME}
+      POSTGRES_USER: ${PAYROLL_DB_USER}
+      POSTGRES_PASSWORD: ${PAYROLL_DB_PASSWORD}
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${PAYROLL_DB_USER} -d ${PAYROLL_DB_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - payroll-data:/var/lib/postgresql/data
+
+  employee-service:
+    build: ./employee-service
+    container_name: employee-service
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      employee-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://employee-db:5432/${EMPLOYEE_DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${EMPLOYEE_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${EMPLOYEE_DB_PASSWORD}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "8081:8081"
+
+  payroll-service:
+    build: ./payroll-service
+    container_name: payroll-service
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      payroll-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://payroll-db:5432/${PAYROLL_DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${PAYROLL_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${PAYROLL_DB_PASSWORD}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "8082:8082"
+
+volumes:
+  employee-data:
+  payroll-data:
