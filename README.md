@@ -38,7 +38,7 @@ El proyecto está diseñado con **Microservicios (Backend)** y una **SPA (Fronte
 
 ## ⚙️ Requisitos Previos
 
-- **Java 21**
+- **Java 17**
 - **Node.js** (v18 o superior)
 - **Docker y Docker Compose** (Para base de datos y RabbitMQ)
 - **Maven** (O puedes usar el wrapper `./mvnw` incluido)
