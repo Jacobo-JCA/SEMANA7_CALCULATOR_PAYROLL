@@ -33,11 +33,10 @@ class PayrollServiceTest {
     private LocalEmployeeRepository employeeRepository;
 
     @InjectMocks
-    private PayrollService service;
+    private PayrollServiceImpl service;
 
     @Test
     void should_calculatePayroll_when_employeeExistsFullTime() {
-        // GIVEN
         Long employeeId = 1L;
         LocalEmployee employee = new LocalEmployee();
         employee.setId(employeeId);
@@ -48,17 +47,9 @@ class PayrollServiceTest {
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
         when(payrollRepository.save(any(Payroll.class))).thenAnswer(i -> i.getArgument(0));
 
-        // WHEN
         PayrollResponse result = service.calculatePayroll(employeeId);
 
-        // THEN
         assertThat(result.getGrossSalary()).isEqualByComparingTo("3000");
-        // For FULL_TIME: 10% (wait, actual code has 9.45% and 8.33% from view_file earlier)
-        // Let's check code logic: 
-        // 9.45% deduction, 8.33% bonus
-        // 3000 * 0.0945 = 283.5
-        // 3000 * 0.0833 = 249.9
-        // net = 3000 - 283.5 + 249.9 = 2966.4
         assertThat(result.getDeductionAmount()).isEqualByComparingTo("283.50");
         assertThat(result.getBonusAmount()).isEqualByComparingTo("249.90");
         assertThat(result.getNetSalary()).isEqualByComparingTo("2966.40");
@@ -67,11 +58,9 @@ class PayrollServiceTest {
 
     @Test
     void should_throwException_when_employeeNotFound() {
-        // GIVEN
         Long employeeId = 1L;
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
 
-        // WHEN & THEN
         assertThatThrownBy(() -> service.calculatePayroll(employeeId))
                 .isInstanceOf(EmployeeNotFoundException.class)
                 .hasMessageContaining("Empleado con id 1 no ha sido sincronizado localmente.");
@@ -79,7 +68,6 @@ class PayrollServiceTest {
 
     @Test
     void should_confirmPayroll_when_payrollExists() {
-        // GIVEN
         Long payrollId = 100L;
         Payroll payroll = new Payroll();
         payroll.setId(payrollId);
@@ -88,28 +76,23 @@ class PayrollServiceTest {
         when(payrollRepository.findById(payrollId)).thenReturn(Optional.of(payroll));
         when(payrollRepository.save(any(Payroll.class))).thenReturn(payroll);
 
-        // WHEN
         PayrollResponse result = service.confirmPayroll(payrollId);
 
-        // THEN
         assertThat(result.getConfirmed()).isTrue();
         verify(payrollRepository).save(payroll);
     }
 
     @Test
     void should_throwException_when_confirmingNonExistentPayroll() {
-        // GIVEN
         Long payrollId = 999L;
         when(payrollRepository.findById(payrollId)).thenReturn(Optional.empty());
 
-        // WHEN & THEN
         assertThatThrownBy(() -> service.confirmPayroll(payrollId))
                 .isInstanceOf(PayrollNotFoundException.class);
     }
 
     @Test
     void should_returnPayroll_when_findingByIdExists() {
-        // GIVEN
         Long id = 1L;
         Payroll payroll = new Payroll();
         payroll.setId(id);
@@ -117,16 +100,13 @@ class PayrollServiceTest {
 
         when(payrollRepository.findById(id)).thenReturn(Optional.of(payroll));
 
-        // WHEN
         PayrollResponse result = service.getPayrollById(id);
 
-        // THEN
         assertThat(result.getEmployeeName()).isEqualTo("Juan");
     }
 
     @Test
     void should_generatePdf_when_payrollExists() throws Exception {
-        // GIVEN
         Long id = 1L;
         Payroll payroll = new Payroll();
         payroll.setId(id);
@@ -143,10 +123,7 @@ class PayrollServiceTest {
 
         when(payrollRepository.findById(id)).thenReturn(Optional.of(payroll));
 
-        // WHEN
         byte[] pdf = service.generatePdf(id);
-
-        // THEN
         assertThat(pdf).isNotEmpty();
     }
 }
