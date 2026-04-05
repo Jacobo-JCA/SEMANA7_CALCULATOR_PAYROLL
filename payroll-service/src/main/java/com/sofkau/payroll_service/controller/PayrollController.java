@@ -2,7 +2,7 @@ package com.sofkau.payroll_service.controller;
 
 import com.lowagie.text.DocumentException;
 import com.sofkau.payroll_service.dto.PayrollResponse;
-import com.sofkau.payroll_service.service.PayrollService;
+import com.sofkau.payroll_service.service.PayrollServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,9 +14,9 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/payroll")
 public class PayrollController {
-    private final PayrollService payrollService;
+    private final PayrollServiceImpl payrollService;
 
-    public PayrollController(PayrollService payrollService) {
+    public PayrollController(PayrollServiceImpl payrollService) {
         this.payrollService = payrollService;
     }
 
