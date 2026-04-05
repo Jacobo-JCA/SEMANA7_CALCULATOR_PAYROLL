@@ -19,6 +19,7 @@ target/
 *.swp
 *.swo
 *~
+HELP.md
 
 # OS
 .DS_Store

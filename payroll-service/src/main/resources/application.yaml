@@ -16,6 +16,23 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+  cloud:
+    function:
+      definition: employeeEvents
+
+    stream:
+      defaultBinder: rabbit
+
+      bindings:
+        employeeEvents-in-0:
+          destination: employee.exchange
+          group: employee-events-group
+
+      rabbit:
+        bindings:
+          employeeEvents-in-0:
+            consumer:
+              bindingRoutingKey: employee.#
   rabbitmq:
     host: rabbitmq
     port: 5672
@@ -24,10 +41,3 @@ spring:
   web:
     resources:
       add-mappings: false
-
-rabbitmq:
-  exchange:
-    employee: employee.exchange
-  queue:
-    employee:
-      events: employee.events.queue
