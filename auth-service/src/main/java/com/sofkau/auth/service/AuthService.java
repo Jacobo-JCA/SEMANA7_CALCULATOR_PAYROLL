@@ -15,7 +15,6 @@ import java.util.Set;
 
 @Service
 public class AuthService {
-
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
