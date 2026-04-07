@@ -1,4 +1,6 @@
-const PAYROLL_API_URL = import.meta.env.VITE_PAYROLL_API_URL || 'http://localhost:8082/api/v1';
+import { apiFetch } from '../utils/apiClient';
+
+const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL || 'http://localhost:8080';
 
 export interface PayrollResponse {
   id: number;
@@ -16,56 +18,56 @@ export interface PayrollResponse {
   updatedAt: string;
 }
 
-export const calculatePayroll = async (employeeId: string): Promise<PayrollResponse> => {
-  const response = await fetch(`${PAYROLL_API_URL}/payroll/calculate/${employeeId}`, {
+export const calculatePayroll = async (employeeId: number | string): Promise<PayrollResponse> => {
+  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/calculate/${employeeId}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to calculate payroll');
+    throw new Error('Error calculating payroll');
   }
 
   return response.json();
 };
 
-export const getPayrollById = async (id: string): Promise<PayrollResponse> => {
-  const response = await fetch(`${PAYROLL_API_URL}/payroll/${id}`);
-
-  if (!response.ok) {
-    throw new Error('Payroll calculation not found');
-  }
-
-  return response.json();
-};
-
-export const getPayrollByEmployeeId = async (employeeId: string): Promise<PayrollResponse | null> => {
-  const response = await fetch(`${PAYROLL_API_URL}/payroll/employee/${employeeId}`);
-  if (response.status === 404) return null;
-  if (!response.ok) throw new Error('Error fetching payroll for employee');
-  return response.json();
-};
-
-export const confirmPayroll = async (payrollId: string): Promise<PayrollResponse> => {
-  const response = await fetch(`${PAYROLL_API_URL}/payroll/${payrollId}/confirm`, {
+export const confirmPayroll = async (payrollId: number | string): Promise<PayrollResponse> => {
+  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/${payrollId}/confirm`, {
     method: 'PATCH',
   });
-  if (!response.ok) throw new Error('Error confirming payroll');
+
+  if (!response.ok) {
+    throw new Error('Error confirming payroll');
+  }
+
   return response.json();
 };
 
-export const downloadPayrollPdf = async (payrollId: string) => {
-  const response = await fetch(`${PAYROLL_API_URL}/payroll/${payrollId}/pdf`);
-  if (!response.ok) throw new Error('Error downloading PDF');
-  const blob = await response.blob();
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `payroll-voucher-${payrollId}.pdf`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  window.URL.revokeObjectURL(url);
+export const getPayrollById = async (payrollId: number | string): Promise<PayrollResponse> => {
+  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/${payrollId}`);
+
+  if (!response.ok) {
+    throw new Error('Payroll not found');
+  }
+
+  return response.json();
+};
+
+export const getPayrollByEmployeeId = async (employeeId: number | string): Promise<PayrollResponse> => {
+  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/employee/${employeeId}`);
+
+  if (!response.ok) {
+    throw new Error('Payroll not found');
+  }
+
+  return response.json();
+};
+
+export const downloadPayrollPdf = async (payrollId: number | string): Promise<Blob> => {
+  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/${payrollId}/pdf`);
+
+  if (!response.ok) {
+    throw new Error('Error downloading PDF');
+  }
+
+  return response.blob();
 };
