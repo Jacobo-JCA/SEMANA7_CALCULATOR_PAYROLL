@@ -48,6 +48,37 @@ services:
     volumes:
       - payroll-data:/var/lib/postgresql/data
 
+  auth-db:
+    image: postgres:14.3
+    container_name: auth-db
+    environment:
+      POSTGRES_DB: ${AUTH_DB_NAME}
+      POSTGRES_USER: ${AUTH_DB_USER}
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${AUTH_DB_USER} -d ${AUTH_DB_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - auth-data:/var/lib/postgresql/data
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    environment:
+      AUTH_DB_HOST: auth-db
+      AUTH_DB_NAME: ${AUTH_DB_NAME}
+      AUTH_DB_USER: ${AUTH_DB_USER}
+      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD}
+    ports:
+      - "8083:8083"
+
   employee-service:
     build: ./employee-service
     container_name: employee-service
@@ -86,6 +117,24 @@ services:
     ports:
       - "8082:8082"
 
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    depends_on:
+      auth-service:
+        condition: service_started
+      employee-service:
+        condition: service_started
+      payroll-service:
+        condition: service_started
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8083
+      EMPLOYEE_SERVICE_URL: http://employee-service:8081
+      PAYROLL_SERVICE_URL: http://payroll-service:8082
+    ports:
+      - "8080:8080"
+
 volumes:
   employee-data:
   payroll-data:
+  auth-data:
