@@ -15,7 +15,6 @@ import java.util.List;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
