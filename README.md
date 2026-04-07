@@ -11,7 +11,7 @@ El proyecto está diseñado con **Microservicios (Backend)** y una **SPA (Fronte
 | Componente | Tecnología |
 |-----------|------------|
 | **Frontend** | React 18 + TypeScript + Vite |
-| **Backend** | Java 21 + Spring Boot 3.x |
+| **Backend** | Java 17 + Spring Boot 3.x |
 | **Base de Datos** | PostgreSQL (Gestionada por Docker) |
 | **ORM** | Spring Data JPA / Hibernate |
 | **Mensajería** | RabbitMQ (Comunicación Asíncrona) |
