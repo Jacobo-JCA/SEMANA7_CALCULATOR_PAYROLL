@@ -5,13 +5,10 @@ import com.sofkau.payroll_service.entity.ContractType;
 import java.math.BigDecimal;
 
 public class PayrollBusinessRules {
-    // Deduction percentages
     public static final BigDecimal PROFESSIONAL_SERVICES_DEDUCTION = new BigDecimal("8.00");
     public static final BigDecimal STANDARD_DEDUCTION = new BigDecimal("9.45");
-    // Bonus percentages
     public static final BigDecimal NO_BONUS = new BigDecimal("0.00");
     public static final BigDecimal STANDARD_BONUS = new BigDecimal("8.33");
-    // Calculation constants
     public static final BigDecimal HUNDRED = new BigDecimal("100");
     public static final int DECIMAL_SCALE = 2;
 
