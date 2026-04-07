@@ -23,7 +23,16 @@ export const ReviewPage = () => {
     if (!payrollId || !payroll) return;
     setIsDownloading(true);
     try {
-      await downloadPayrollPdf(payrollId);
+      const blob = await downloadPayrollPdf(payrollId);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `payroll-voucher-${payrollId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 5000);
     } catch (err) {

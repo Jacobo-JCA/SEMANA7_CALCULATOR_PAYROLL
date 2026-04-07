@@ -2,6 +2,8 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { User, Layers, PieChart, Lock, Users, Info } from 'lucide-react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getAllEmployees } from '../../services/employeeService';
+import { useAuth } from '../../contexts/AuthContext';
+import { LogOut } from 'lucide-react';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -12,6 +14,7 @@ export const AppLayout = ({ children, currentStep = 1 }: AppLayoutProps) => {
   const { id, payrollId } = useParams<{ id?: string; payrollId?: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const { logoutUser } = useAuth();
   const [hasEmployees, setHasEmployees] = useState<boolean>(false);
 
   useEffect(() => {
@@ -58,8 +61,18 @@ export const AppLayout = ({ children, currentStep = 1 }: AppLayoutProps) => {
             <button onClick={() => navigate('/history')} className="text-sm font-medium text-gray-500 hover:text-[#004DB3] transition-colors">History</button>
             <button onClick={() => navigate('/settings')} className="text-sm font-medium text-gray-500 hover:text-[#004DB3] transition-colors">Settings</button>
           </nav>
-          <div className="bg-blue-50 text-[#004DB3] text-[11px] font-bold px-3 py-1.5 rounded-md uppercase tracking-wider">
-            {currentStep > 0 ? `Step ${currentStep} of 4` : 'Overview'}
+          <div className="flex items-center gap-4">
+            <div className="bg-blue-50 text-[#004DB3] text-[11px] font-bold px-3 py-1.5 rounded-md uppercase tracking-wider">
+              {currentStep > 0 ? `Step ${currentStep} of 4` : 'Overview'}
+            </div>
+            <div className="w-px h-6 bg-gray-200"></div>
+            <button 
+              onClick={logoutUser} 
+              className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-red-600 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </header>
