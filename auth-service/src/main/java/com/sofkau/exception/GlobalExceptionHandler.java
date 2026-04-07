@@ -1,4 +1,4 @@
-package com.sofkau.auth.config;
+package com.sofkau.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
