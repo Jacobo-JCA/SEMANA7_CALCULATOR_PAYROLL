@@ -4,9 +4,9 @@ spring:
   application:
     name: employee-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/employee_db # Ajusta el nombre de la BD si es necesario
-    username: postgres # Ajusta el usuario si es diferente
-    password: root # Ajusta la contraseña si es diferente
+    url: jdbc:postgresql://localhost:5432/employee_db
+    username: postgres
+    password: root
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
