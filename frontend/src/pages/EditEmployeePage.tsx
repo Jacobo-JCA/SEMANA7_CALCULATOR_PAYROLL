@@ -40,6 +40,8 @@ export const EditEmployeePage = () => {
           setError("Los datos no pueden modificarse porque la nómina ya fue calculada y confirmada.");
           setIsLocked(true);
         }
+      }).catch(() => {
+        // Silently ignore 404 errors for employees without a payroll history
       });
 
       getEmployeeById(id)

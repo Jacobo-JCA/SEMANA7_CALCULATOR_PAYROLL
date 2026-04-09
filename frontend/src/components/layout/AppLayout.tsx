@@ -101,7 +101,7 @@ export const AppLayout = ({ children, currentStep = 1 }: AppLayoutProps) => {
             <NavItem 
               icon={<User className="w-[18px] h-[18px]" />} 
               label="Employee Details" 
-              active={location.pathname.startsWith('/edit') || location.pathname.startsWith('/register')} 
+              active={location.pathname.startsWith('/edit') || location.pathname.startsWith('/employees/new')} 
               onClick={() => handleNav('details')}
               disabled={!activeId}
               lockMessage={!hasEmployees ? "Register your first employee to unlock this feature" : "Select an employee from the list to view details"}

@@ -7,6 +7,7 @@ import { ReviewPage } from './pages/ReviewPage';
 import { EmployeeListPage } from './pages/EmployeeListPage';
 import { AppLayout } from './components/layout/AppLayout';
 import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -17,12 +18,13 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Navigate to="/employees" replace />} />
             <Route path="/employees" element={<EmployeeListPage />} />
-            <Route path="/register" element={<RegisterEmployeePage />} />
+            <Route path="/employees/new" element={<RegisterEmployeePage />} />
             <Route path="/edit/:id" element={<EditEmployeePage />} />
             <Route path="/earnings/:id" element={<EarningsPage />} />
             <Route path="/deductions/:payrollId" element={<DeductionsPage />} />

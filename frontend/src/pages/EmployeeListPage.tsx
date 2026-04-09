@@ -78,7 +78,7 @@ export const EmployeeListPage = () => {
             Begin by adding your first employee to the system to unlock all payroll and reporting features.
           </p>
           <button 
-            onClick={() => navigate('/register')}
+            onClick={() => navigate('/employees/new')}
             className="bg-[#004DB3] hover:bg-[#003d8f] text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-3 transition-all shadow-md active:scale-95"
           >
             <UserPlus className="w-5 h-5" />
@@ -103,7 +103,7 @@ export const EmployeeListPage = () => {
                 <span className="text-[10px] bg-blue-50 text-[#004DB3] px-1.5 py-0.5 rounded ml-1">{employees.length}</span>
               </h2>
               <button 
-                onClick={() => navigate('/register')}
+                onClick={() => navigate('/employees/new')}
                 className="p-2 bg-blue-50 text-[#004DB3] rounded-lg hover:bg-blue-100 transition-colors"
                 title="Add New Employee"
               >
@@ -162,7 +162,7 @@ export const EmployeeListPage = () => {
 
           <div className="p-4 border-t border-gray-50 bg-gray-50/40">
             <button 
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/employees/new')}
               className="w-full py-2.5 px-4 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-600 hover:text-[#004DB3] hover:border-blue-200 flex items-center justify-center gap-2 transition-all shadow-sm active:scale-95"
             >
               <UserPlus className="w-3.5 h-3.5" />
