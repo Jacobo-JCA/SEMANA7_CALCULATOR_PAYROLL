@@ -76,8 +76,16 @@ services:
       AUTH_DB_NAME: ${AUTH_DB_NAME}
       AUTH_DB_USER: ${AUTH_DB_USER}
       AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      EXPERITION_TIME: ${EXPERITION_TIME}
     ports:
       - "8083:8083"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
 
   employee-service:
     build: ./employee-service
@@ -95,6 +103,7 @@ services:
       RABBITMQ_PORT: ${RABBITMQ_PORT}
       RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS}
+      SECRET_KEY: ${SECRET_KEY}
     ports:
       - "8081:8081"
 
@@ -114,6 +123,7 @@ services:
       RABBITMQ_PORT: ${RABBITMQ_PORT}
       RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER}
       RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS}
+      SECRET_KEY: ${SECRET_KEY}
     ports:
       - "8082:8082"
 
@@ -122,7 +132,7 @@ services:
     container_name: api-gateway
     depends_on:
       auth-service:
-        condition: service_started
+        condition: service_healthy
       employee-service:
         condition: service_started
       payroll-service:
@@ -131,6 +141,9 @@ services:
       AUTH_SERVICE_URL: http://auth-service:8083
       EMPLOYEE_SERVICE_URL: http://employee-service:8081
       PAYROLL_SERVICE_URL: http://payroll-service:8082
+      JWT_SECRET: ${JWT_SECRET}
+      EXPERITION_TIME: ${EXPERITION_TIME}
+      SECRET_KEY: ${SECRET_KEY}
     ports:
       - "8080:8080"
 
