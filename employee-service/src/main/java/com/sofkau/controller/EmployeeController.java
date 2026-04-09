@@ -1,5 +1,6 @@
 package com.sofkau.controller;
 
+import com.sofkau.config.RoleInterceptor.AdminOnly;
 import com.sofkau.dto.*;
 import com.sofkau.service.ContractService;
 import com.sofkau.service.EmployeeService;
@@ -21,6 +22,7 @@ public class EmployeeController {
         this.contractService = contractService;
     }
 
+    @AdminOnly
     @PostMapping
     public ResponseEntity<EmployeeResponse> create(@Valid @RequestBody EmployeeRequest request) {
         EmployeeResponse response = employeeService.create(request);
@@ -37,11 +39,13 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.findById(id));
     }
 
+    @AdminOnly
     @PatchMapping("/{id}")
     public ResponseEntity<EmployeeResponse> update(@PathVariable Long id, @RequestBody EmployeeUpdateRequest request) {
         return ResponseEntity.ok(employeeService.update(id, request));
     }
 
+    @AdminOnly
     @PatchMapping("/{id}/contracts/{contractId}")
     public ResponseEntity<ContractResponse> updateContract(
             @PathVariable Long id,
@@ -50,6 +54,7 @@ public class EmployeeController {
         return ResponseEntity.ok(contractService.updateContract(id, contractId, request));
     }
 
+    @AdminOnly
     @PatchMapping("/{id}/contracts/{contractId}/end-date")
     public ResponseEntity<Void> closeContract(
             @PathVariable Long id,

@@ -25,6 +25,10 @@ spring:
     resources:
       add-mappings: false
 
+internal:
+  signature:
+    secret: ${SECRET_KEY}
+
 logging:
   level:
     root: INFO
