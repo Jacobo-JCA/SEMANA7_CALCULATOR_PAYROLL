@@ -21,3 +21,12 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${EXPERITION_TIME}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
