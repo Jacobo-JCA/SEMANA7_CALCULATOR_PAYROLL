@@ -50,7 +50,7 @@ export const createEmployee = async (data: EmployeeRequest): Promise<EmployeeRes
     if (errData?.details) {
       throw new Error(errData.details.join(', '));
     }
-    throw new Error(errData?.message || 'Error occurred while creating employee');
+    throw new Error(errData?.message || 'No tiene permiso para realizar esta accion');
   }
 
   return response.json();
