@@ -15,7 +15,6 @@ export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     },
   });
 
-  // Si el token expiró o es inválido, redirige al login
   if (response.status === 401) {
     localStorage.removeItem('accessToken');
     throw new Error('Unauthorized. Please login again.');

@@ -33,7 +33,6 @@ export const EarningsPage = () => {
     setError(null);
     try {
       const response = await calculatePayroll(id);
-      // Navigate to Step 3 with the new payroll ID
       navigate(`/deductions/${response.id}`);
     } catch (err: any) {
       setError(err.message || 'Error calculating payroll');
@@ -71,9 +70,6 @@ export const EarningsPage = () => {
     );
   }
 
-  // Simulation for the view to match the design (optional/informational)
-
-  // Formatting date
   const effectiveDate = employee.activeContract?.startDate 
     ? new Date(employee.activeContract.startDate).toLocaleDateString('en-US', {
         month: 'long', day: '2-digit', year: 'numeric'
@@ -84,7 +80,6 @@ export const EarningsPage = () => {
     <AppLayout currentStep={2}>
       <div className="flex flex-col gap-6">
 
-        {/* Header Title and Progress */}
         <div className="flex items-center justify-between">
           <h1 className="text-[28px] font-bold text-gray-900 tracking-tight">Review & Edit</h1>
           <div className="flex flex-col items-end gap-2 w-48">
@@ -95,7 +90,6 @@ export const EarningsPage = () => {
           </div>
         </div>
 
-        {/* Lock Banner */}
         <div className="bg-[#8EF1AF] rounded-lg p-4 flex gap-3 items-start shadow-sm border border-[#7BD297]/30">
           <div className="bg-[#5ECC82] p-2 rounded-lg shrink-0 mt-0.5 shadow-sm">
             <Lock className="w-5 h-5 text-[#0A4A1C] fill-[#0A4A1C]" />
@@ -106,11 +100,9 @@ export const EarningsPage = () => {
           </div>
         </div>
 
-        {/* Employee Card Details */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex flex-col gap-6">
           <div className="flex justify-between items-start">
             <div className="flex gap-5 items-center">
-              {/* Profile Picture Placeholder */}
               <div className="w-[84px] h-[84px] bg-[#1E293B] rounded-[18px] flex items-end justify-center overflow-hidden shrink-0 shadow-inner p-2 relative">
                 <User className="absolute -bottom-2 w-16 h-16 text-[#38BDF8] fill-[#38BDF8]" strokeWidth={1} />
               </div>
@@ -156,7 +148,6 @@ export const EarningsPage = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col items-center mt-6 gap-4">
           <button
             disabled={isCalculating}

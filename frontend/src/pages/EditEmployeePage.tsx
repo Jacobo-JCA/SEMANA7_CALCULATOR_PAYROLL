@@ -68,13 +68,11 @@ export const EditEmployeePage = () => {
     setError(null);
     setSuccess(null);
     try {
-      // Update basic info
       await updateEmployee(id, {
         name: data.name,
         grossSalary: data.grossSalary
       });
 
-      // Update contract if exists
       if (contractId) {
         await updateContract(id, contractId, {
           contractType: data.contractType as ContractType,
@@ -102,7 +100,6 @@ export const EditEmployeePage = () => {
     <AppLayout currentStep={1}>
       <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
 
-        {/* Main Form Card */}
         <div className="bg-white rounded-[24px] shadow-sm border border-gray-100 p-10">
           <div className="flex justify-between items-start mb-10">
             <div className="flex gap-4 items-start">
@@ -130,7 +127,6 @@ export const EditEmployeePage = () => {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-            {/* Identity Group */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="space-y-2">
                 <label className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">Full Name</label>
@@ -158,7 +154,6 @@ export const EditEmployeePage = () => {
               </div>
             </div>
 
-            {/* Contract Logistics Group */}
             <div className="pt-6 border-t border-gray-50 grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="space-y-2">
                 <label className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">Contract Model</label>

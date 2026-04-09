@@ -23,7 +23,6 @@ export const AppLayout = ({ children, currentStep = 1 }: AppLayoutProps) => {
         setHasEmployees(data.length > 0);
       })
       .catch(() => {
-        // Handle error silently or set fallback
       });
   }, [location.pathname]);
 
@@ -51,7 +50,6 @@ export const AppLayout = ({ children, currentStep = 1 }: AppLayoutProps) => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-inter">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 shrink-0">
         <div className="font-bold text-xl text-gray-900 tracking-tight">Calculator Payroll</div>
         
@@ -78,7 +76,6 @@ export const AppLayout = ({ children, currentStep = 1 }: AppLayoutProps) => {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
         <aside className="w-64 bg-white border-r border-gray-200 py-6 flex flex-col shrink-0">
           <div className="px-4 space-y-2">
             <NavItem 
@@ -120,7 +117,6 @@ export const AppLayout = ({ children, currentStep = 1 }: AppLayoutProps) => {
           </div>
         </aside>
 
-        {/* Main Content */}
         <main className="flex-1 overflow-y-auto">
           <div className={`${currentStep === 0 ? 'h-full' : 'max-w-3xl mx-auto p-10'}`}>
             {children}

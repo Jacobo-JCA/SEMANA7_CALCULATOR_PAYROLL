@@ -25,14 +25,12 @@ export const LoginPage = () => {
   };
 
   const handleBypass = () => {
-    // Hidden ease-of-use feature for quick development bypassing manual entry if desired
     setUsername('admin');
     setPassword('123');
   };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-center font-inter sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Decorative background blobs */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-blue-100 opacity-50 blur-3xl" />
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-blue-50 opacity-50 blur-3xl" />
 

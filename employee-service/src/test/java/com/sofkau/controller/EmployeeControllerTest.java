@@ -39,7 +39,6 @@ class EmployeeControllerTest {
 
     @Test
     void should_return201_when_validEmployee() throws Exception {
-        // GIVEN
         EmployeeRequest request = new EmployeeRequest("Juan Perez", new BigDecimal("3000"), ContractType.FULL_TIME);
         ContractResponse activeContract = new ContractResponse(1L, ContractType.FULL_TIME, LocalDate.now(), null);
         EmployeeResponse response = new EmployeeResponse(1L, "Juan Perez", new BigDecimal("3000"), LocalDateTime.now(),
@@ -47,7 +46,6 @@ class EmployeeControllerTest {
 
         when(service.create(any(EmployeeRequest.class))).thenReturn(response);
 
-        // WHEN & THEN
         mockMvc.perform(post("/api/v1/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -58,10 +56,8 @@ class EmployeeControllerTest {
 
     @Test
     void should_return400_when_invalidEmployee() throws Exception {
-        // GIVEN
-        EmployeeRequest request = new EmployeeRequest("", new BigDecimal("-100"), null); // Invalid
+        EmployeeRequest request = new EmployeeRequest("", new BigDecimal("-100"), null);
 
-        // WHEN & THEN
         mockMvc.perform(post("/api/v1/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -70,11 +66,9 @@ class EmployeeControllerTest {
 
     @Test
     void should_return200_when_findAll() throws Exception {
-        // GIVEN
         EmployeeResponse r1 = new EmployeeResponse(1L, "Juan", new BigDecimal("2000"), LocalDateTime.now(), null);
         when(service.findAll()).thenReturn(List.of(r1));
 
-        // WHEN & THEN
         mockMvc.perform(get("/api/v1/employees"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Juan"));
@@ -82,11 +76,9 @@ class EmployeeControllerTest {
 
     @Test
     void should_return200_when_findByIdExists() throws Exception {
-        // GIVEN
         EmployeeResponse response = new EmployeeResponse(1L, "Juan", new BigDecimal("2000"), LocalDateTime.now(), null);
         when(service.findById(1L)).thenReturn(response);
 
-        // WHEN & THEN
         mockMvc.perform(get("/api/v1/employees/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Juan"));
@@ -94,21 +86,17 @@ class EmployeeControllerTest {
 
     @Test
     void should_return404_when_findByIdDoesNotExist() throws Exception {
-        // GIVEN
         when(service.findById(anyLong())).thenThrow(new EmployeeNotFoundException("Not found"));
 
-        // WHEN & THEN
         mockMvc.perform(get("/api/v1/employees/99"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void should_return200_when_updatingEmployee() throws Exception {
-        // GIVEN
         EmployeeResponse response = new EmployeeResponse(1L, "Juan", new BigDecimal("3500"), LocalDateTime.now(), null);
         when(service.update(anyLong(), any())).thenReturn(response);
 
-        // WHEN & THEN
         mockMvc.perform(patch("/api/v1/employees/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))

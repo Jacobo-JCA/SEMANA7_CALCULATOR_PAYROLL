@@ -65,7 +65,6 @@ export const EmployeeListPage = () => {
     );
   }
 
-  // Empty State
   if (employees.length === 0) {
     return (
       <AppLayout currentStep={0}>
@@ -93,7 +92,6 @@ export const EmployeeListPage = () => {
     <AppLayout currentStep={0}>
       <div className="flex h-full w-full overflow-hidden animate-fade-in">
         
-        {/* Left Column: Compact Employee List (30%) */}
         <div className="w-[320px] lg:w-[380px] border-r border-gray-100 flex flex-col bg-white shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10">
           <div className="p-6 border-b border-gray-50 flex flex-col gap-4 bg-white sticky top-0">
             <div className="flex items-center justify-between">
@@ -171,7 +169,6 @@ export const EmployeeListPage = () => {
           </div>
         </div>
 
-        {/* Right Column: Employee Details (70%) */}
         <div className="flex-1 overflow-y-auto bg-[#F8FAFC]">
           {!selectedEmployee ? (
             <div className="h-full flex flex-col items-center justify-center text-gray-300 animate-pulse">
@@ -181,7 +178,6 @@ export const EmployeeListPage = () => {
           ) : (
             <div key={selectedEmployee.id} className="p-10 animate-fade-in flex flex-col gap-8 max-w-4xl mx-auto">
               
-              {/* Profile Header */}
               <div className="flex justify-between items-start">
                 <div className="flex gap-6 items-center">
                   <div className="w-20 h-20 bg-slate-900 rounded-3xl flex items-end justify-center overflow-hidden shrink-0 shadow-xl p-1 border border-slate-700">
@@ -218,7 +214,6 @@ export const EmployeeListPage = () => {
                 </div>
               )}
 
-              {/* Salary Components Breakdown */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-50 flex flex-col gap-3">
                   <div className="flex items-center justify-between">
@@ -260,7 +255,6 @@ export const EmployeeListPage = () => {
                 </div>
               </div>
 
-              {/* Main Action Section */}
               {selectedEmployee.activeContract && (
                 <div className="bg-[#004DB3]/[0.02] border border-[#004DB3]/10 rounded-[28px] p-8 mt-4 flex items-center justify-between">
                   <div className="flex flex-col gap-1">
@@ -288,7 +282,6 @@ export const EmployeeListPage = () => {
                 </div>
               </div>
 
-              {/* Contract Closure Section (Glassmorphism effect) - MOVED HERE */}
               {selectedEmployee.activeContract && (
                 <div className="bg-slate-900/5 backdrop-blur-md border border-slate-200/50 rounded-[28px] p-8 mt-4 overflow-hidden relative group">
                   <div className="absolute top-0 right-0 p-8 text-slate-200 opacity-20 transform translate-x-4 -translate-y-4 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform">
@@ -328,7 +321,6 @@ export const EmployeeListPage = () => {
 
       </div>
       
-      {/* Scrollbar Customization */}
       <style>{`
         .scrollbar-thin::-webkit-scrollbar { width: 4px; }
         .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }

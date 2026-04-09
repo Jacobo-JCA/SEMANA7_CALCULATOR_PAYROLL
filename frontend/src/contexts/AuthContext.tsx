@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Optionally trigger an initial check to validate token format/expiry here
     setIsLoading(false);
 
     const handleAuthError = () => {
