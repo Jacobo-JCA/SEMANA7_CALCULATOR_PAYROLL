@@ -1,19 +1,24 @@
-export const apiFetch = async (url: string, options: RequestInit = {}) => {
-  const token = localStorage.getItem('token');
-  const headers = new Headers(options.headers || {});
+const GATEWAY_URL = import.meta.env.VITE_GATEWAY_URL || 'http://localhost:8080';
 
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
+export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
+  const token = localStorage.getItem('accessToken');
+  if (!token) {
+    throw new Error('No access token found. Please login first.');
   }
 
-  if (!headers.has('Content-Type') && !(options.body instanceof FormData)) {
-    headers.set('Content-Type', 'application/json');
-  }
+  const response = await fetch(`${GATEWAY_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
 
-  const response = await fetch(url, { ...options, headers });
-
+  // Si el token expiró o es inválido, redirige al login
   if (response.status === 401) {
-    window.dispatchEvent(new Event('auth-error'));
+    localStorage.removeItem('accessToken');
+    throw new Error('Unauthorized. Please login again.');
   }
 
   return response;

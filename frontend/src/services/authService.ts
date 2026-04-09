@@ -28,21 +28,22 @@ export const login = async (credentials: LoginParams): Promise<AuthResponse> => 
   }
 
   const data: AuthResponse = await response.json();
-  localStorage.setItem('token', data.accessToken);
+  localStorage.setItem('accessToken', data.accessToken);
 
   return data;
 };
 
-export const register = async (credentials: RegisterParams, role: string = 'USER'): Promise<void> => {
+export const register = async (credentials: RegisterParams): Promise<void> => {
   const response = await fetch(`${GATEWAY_URL}/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ ...credentials, role }),
+    body: JSON.stringify(credentials),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to register user');
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Failed to register user');
   }
 };

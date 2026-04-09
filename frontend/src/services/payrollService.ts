@@ -19,7 +19,7 @@ export interface PayrollResponse {
 }
 
 export const calculatePayroll = async (employeeId: number | string): Promise<PayrollResponse> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/calculate/${employeeId}`, {
+  const response = await apiFetch(`/api/v1/payroll/calculate/${employeeId}`, {
     method: 'POST',
   });
 
@@ -31,7 +31,7 @@ export const calculatePayroll = async (employeeId: number | string): Promise<Pay
 };
 
 export const confirmPayroll = async (payrollId: number | string): Promise<PayrollResponse> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/${payrollId}/confirm`, {
+  const response = await apiFetch(`/api/v1/payroll/${payrollId}/confirm`, {
     method: 'PATCH',
   });
 
@@ -43,7 +43,7 @@ export const confirmPayroll = async (payrollId: number | string): Promise<Payrol
 };
 
 export const getPayrollById = async (payrollId: number | string): Promise<PayrollResponse> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/${payrollId}`);
+  const response = await apiFetch(`/api/v1/payroll/${payrollId}`);
 
   if (!response.ok) {
     throw new Error('Payroll not found');
@@ -53,7 +53,7 @@ export const getPayrollById = async (payrollId: number | string): Promise<Payrol
 };
 
 export const getPayrollByEmployeeId = async (employeeId: number | string): Promise<PayrollResponse> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/employee/${employeeId}`);
+  const response = await apiFetch(`/api/v1/payroll/employee/${employeeId}`);
 
   if (!response.ok) {
     throw new Error('Payroll not found');
@@ -63,7 +63,7 @@ export const getPayrollByEmployeeId = async (employeeId: number | string): Promi
 };
 
 export const downloadPayrollPdf = async (payrollId: number | string): Promise<Blob> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/payroll/${payrollId}/pdf`);
+  const response = await apiFetch(`/api/v1/payroll/${payrollId}/pdf`);
 
   if (!response.ok) {
     throw new Error('Error downloading PDF');

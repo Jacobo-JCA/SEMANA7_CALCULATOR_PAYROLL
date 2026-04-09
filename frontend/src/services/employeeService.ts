@@ -40,7 +40,7 @@ export interface EmployeeResponse {
 }
 
 export const createEmployee = async (data: EmployeeRequest): Promise<EmployeeResponse> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/employees`, {
+  const response = await apiFetch('/api/v1/employees', {
     method: 'POST',
     body: JSON.stringify(data),
   });
@@ -57,7 +57,7 @@ export const createEmployee = async (data: EmployeeRequest): Promise<EmployeeRes
 };
 
 export const getEmployeeById = async (id: string): Promise<EmployeeResponse> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/employees/${id}`);
+  const response = await apiFetch(`/api/v1/employees/${id}`);
 
   if (!response.ok) {
     throw new Error('Employee not found or server error');
@@ -67,7 +67,7 @@ export const getEmployeeById = async (id: string): Promise<EmployeeResponse> => 
 };
 
 export const updateEmployee = async (id: string, data: EmployeeUpdateRequest): Promise<EmployeeResponse> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/employees/${id}`, {
+  const response = await apiFetch(`/api/v1/employees/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(data),
   });
@@ -84,7 +84,7 @@ export const updateEmployee = async (id: string, data: EmployeeUpdateRequest): P
 };
 
 export const updateContract = async (employeeId: string, contractId: number, data: ContractUpdateRequest): Promise<ContractResponse> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/employees/${employeeId}/contracts/${contractId}`, {
+  const response = await apiFetch(`/api/v1/employees/${employeeId}/contracts/${contractId}`, {
     method: 'PATCH',
     body: JSON.stringify(data),
   });
@@ -98,7 +98,7 @@ export const updateContract = async (employeeId: string, contractId: number, dat
 };
 
 export const closeContract = async (employeeId: string, contractId: number, data: ContractEndDateRequest): Promise<void> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/employees/${employeeId}/contracts/${contractId}/end-date`, {
+  const response = await apiFetch(`/api/v1/employees/${employeeId}/contracts/${contractId}/end-date`, {
     method: 'PATCH',
     body: JSON.stringify(data),
   });
@@ -110,7 +110,7 @@ export const closeContract = async (employeeId: string, contractId: number, data
 };
 
 export const getAllEmployees = async (): Promise<EmployeeResponse[]> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/employees`);
+  const response = await apiFetch('/api/v1/employees');
 
   if (!response.ok) {
     throw new Error('Error fetching employees');
@@ -120,7 +120,7 @@ export const getAllEmployees = async (): Promise<EmployeeResponse[]> => {
 };
 
 export const deleteEmployee = async (id: number): Promise<void> => {
-  const response = await apiFetch(`${GATEWAY_URL}/api/v1/employees/${id}`, {
+  const response = await apiFetch(`/api/v1/employees/${id}`, {
     method: 'DELETE',
   });
 
