@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import com.sofkau.payroll_service.config.RoleInterceptor.AdminOnly;
+
 @RestController
 @RequestMapping("/api/v1/payroll")
 public class PayrollController {
@@ -20,6 +22,7 @@ public class PayrollController {
         this.payrollService = payrollService;
     }
 
+    @AdminOnly
     @PostMapping("/calculate/{employeeId}")
     public ResponseEntity<PayrollResponse> calculatePayroll(@PathVariable Long employeeId) {
         PayrollResponse response = payrollService.calculatePayroll(employeeId);
@@ -38,11 +41,13 @@ public class PayrollController {
         return ResponseEntity.ok(response);
     }
 
+    @AdminOnly
     @PatchMapping("/{payrollId}/confirm")
     public ResponseEntity<PayrollResponse> confirmPayroll(@PathVariable Long payrollId) {
         return ResponseEntity.ok(payrollService.confirmPayroll(payrollId));
     }
 
+    @AdminOnly
     @GetMapping("/{payrollId}/pdf")
     public ResponseEntity<byte[]> downloadPdf(@PathVariable Long payrollId) throws DocumentException, IOException {
         byte[] pdfContent = payrollService.generatePdf(payrollId);

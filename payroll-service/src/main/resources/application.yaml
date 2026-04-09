@@ -41,3 +41,6 @@ spring:
   web:
     resources:
       add-mappings: false
+internal:
+  signature:
+    secret: ${SECRET_KEY:default-secret}
